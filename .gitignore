@@ -1,0 +1,12 @@
+# Temp files
+*~
+*.swp
+*.swo
+
+# Docker secrets
+*.secret
+
+# Model parameters
+*.safetensors
+*.pth
+*.engine
