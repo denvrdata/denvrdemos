@@ -1,0 +1,30 @@
+#!/bin/bash
+
+set -e
+
+# Define a few paths we'll need to know
+TOKENIZER_DIR="/data/models/${MODEL_NAME}"
+ENGINE_DIR="/data/engines/${MODEL_NAME}_1gpu_bf16"
+REPO_DIR="/data/repository"
+TRITON_MODEL_DIR="${REPO_DIR}/inflight_batcher_llm"
+
+# Define a few triton runtime settings
+# For this demo we're disabling batch with MAX_BATCH_SZ=0
+MAX_BATCH_SZ=0
+MAX_DELAY=0
+DECOUPLED_MODE=False
+
+# Copy the inflight_batcher_llm files into our repo directory
+cp -rp tensorrtllm_backend/all_models/inflight_batcher_llm ${REPO_DIR}/.
+
+
+# Create an alias for our fill_template script
+alias ft="python3 tensorrtllm_backend/tools/fill_template.py"
+
+# Populate our config files
+ft -i ${TRITON_MODEL_DIR}/preprocessing/config.pbtxt tokenizer_dir:${TOKENIZER_DIR},tokenizer_type:auto,triton_max_batch_size:${MAX_BATCH_SZ},preprocessing_instance_count:1
+ft -i ${TRITON_MODEL_DIR}/postprocessing/config.pbtxt tokenizer_dir:${TOKENIZER_DIR},tokenizer_type:auto,triton_max_batch_size:${MAX_BATCH_SZ},postprocessing_instance_count:1
+ft -i ${TRITON_MODEL_DIR}/tensorrt_llm_bls/config.pbtxt triton_max_batch_size:${MAX_BATCH_SZ},decoupled_mode:True,bls_instance_count:1,accumulate_tokens:False
+ft -i ${TRITON_MODEL_DIR}/ensemble/config.pbtxt triton_max_batch_size:${MAX_BATCH_SZ}
+ft -i ${TRITON_MODEL_DIR}/tensorrt_llm/config.pbtxt triton_backend:tensorrtllm,triton_max_batch_size:${MAX_BATCH_SZ},decoupled_mode:${DECOUPLED_MODE},max_beam_width:1,engine_dir:${ENGINE_PATH},max_tokens_in_paged_kv_cache:2560,max_attention_window_size:2560,kv_cache_free_gpu_mem_fraction:0.5,exclude_input_in_output:True,enable_kv_cache_reuse:False,batching_strategy:inflight_fused_batching,max_queue_delay_microseconds:${MAX_DELAY}
+

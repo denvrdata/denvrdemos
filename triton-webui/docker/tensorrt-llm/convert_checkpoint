@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+
+python3 TensorRT-LLM/examples/llama/convert_checkpoint.py \
+    --model_dir /data/models/${MODEL_NAME} \
+    --output_dir /data/checkpoints/${MODEL_NAME}_1gpu_bf16 \
+    --dtype bfloat16

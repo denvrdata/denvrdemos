@@ -1,0 +1,16 @@
+#!/bin/bash
+
+set -e
+
+trtllm-build --checkpoint_dir /data/checkpoints/${MODEL_NAME}_1gpu_bf16 \
+            --output_dir /data/engines/${MODEL_NAME}_1gpu_bf16 \
+            --gpt_attention_plugin bfloat16 \
+            --gemm_plugin bfloat16
+
+echo "Validating Compiled Engine"
+
+python3 examples/run.py \
+    --engine_dir /data/engines/${MODEL_NAME}_1gpu_bf16 \
+    --max_output_len 100 \
+    --tokenizer_dir /data/models/${MODEL_NAME} \
+    --input_text "How do I count to nine in French?"
