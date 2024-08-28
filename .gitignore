@@ -10,3 +10,7 @@
 *.safetensors
 *.pth
 *.engine
+
+# YARA specific
+yara/.config/ngc-api-key
+yara/.config/nim.env
