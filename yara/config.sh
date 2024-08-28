@@ -16,6 +16,7 @@ echo 'Writing key to docker environment variable in .config/nim.env'
 echo "NGC_API_KEY=$ngc_api_key" > .config/nim.env
 
 IP=$(curl ifconfig.me)
+mkdir -p .config/caddy
 echo "Writing .config/caddy/Caddyfile"
 tee .config/caddy/Caddyfile <<EOF
 $IP.nip.io {
