@@ -36,10 +36,14 @@ else
 fi
 
 echo 'Logging into nvcr.io'
-sudo cat .config/ngc-api-key | docker login nvcr.io --username '$oauthtoken' --password-stdin
+cat .config/ngc-api-key | sudo docker login nvcr.io --username '$oauthtoken' --password-stdin
 
 echo 'Pulling down docker images'
 time sudo docker compose pull
+
+mkdir -p data/nim
+mkdir -p data/webui
+mkdir -p data/caddy
 
 echo 'Starting docker services'
 time sudo docker compose up -d

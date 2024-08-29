@@ -2,13 +2,15 @@
 services:
   nim:
     image: nvcr.io/nim/meta/llama3-8b-instruct:1.0.0
+    user: 1000:1000
+    shm_size: 16GB
     # Directory for storage cached models (for faster restarts)
     # We'll pull this from NFS for our example
     volumes:
       - ./data/nim:/opt/nim/.cache:rw
     # Set the NGC_CLI_API_KEY environment variable, so that the container can download models
     env_file:
-      - path: ./.config/ngc.env
+      - path: ./.config/nim.env
         required: true
     # Specify our GPU
     deploy:
@@ -24,9 +26,10 @@ services:
       interval: 30s
       timeout: 30s
       retries: 10
-      start_period: 60s
+      start_period: 180s
   webui:
     image: ghcr.io/open-webui/open-webui:v0.3.11-cuda
+    user: 1000:1000
     # TODO: Move these to an .env file
     environment:
       - "OPENAI_API_BASE_URL=http://nim:8000/v1"
@@ -52,6 +55,7 @@ services:
         condition: service_healthy
   caddy:
     image: caddy:latest
+    user: 1000:1000
     ports:
       - 80:80
       - 443:443

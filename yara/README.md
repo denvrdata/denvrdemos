@@ -119,6 +119,7 @@ From this machine we'll just clone this demo repo and run the config.sh script
 ```shell
 > git clone -b rf/yara https://github.com/denvrdata/denvrdemos.git
 > cd denvrdemos/yara
+> chmod +x config.sh
 > ./config.sh
 ```
 
