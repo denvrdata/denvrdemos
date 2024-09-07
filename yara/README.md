@@ -76,8 +76,7 @@ In order to pull down an NVIDIA NIM container you'll need to login to your [deve
 
 ![NGC Key](assets/images/ngc-key.png)
 
-
-When you hit "+ Generate Personal Key", you'll need to give you key a name and expiration.
+When you hit "Generate Personal Key", you'll need to give your key a name and expiration.
 At minimum, you should authorize access to "NGC Catalog".
 You'll also want to save token `nvapi-****` somewhere safe like in a password manager.
 
@@ -118,9 +117,10 @@ From this machine we'll just clone this demo repo and run the config.sh script
 
 ```shell
 > git clone -b rf/yara https://github.com/denvrdata/denvrdemos.git
+
 > cd denvrdemos/yara
-> chmod +x config.sh
-> ./config.sh
+
+> bash config.sh
 ```
 
 TODO: Run config.sh and show output

@@ -4,9 +4,38 @@ set -e
 
 ROOT=$(pwd)
 
-# NOTE: AFAICT all NVIDIA personal access tokens are 70 characters long
-# This help us avoid a double copy situation.
-read -r -n 71 -s -p 'Enter your NGC API Key: ' ngc_api_key
+n=0
+ngc_api_key=""
+prompt="Entry your NGC API Key (nvapi-****): "
+while IFS= read -p "$prompt" -r -s -n 1 char
+do
+    # Exit immediately if they hit enter
+    if [[ $char == $'\0' ]]
+    then
+        break
+    fi
+
+    # Print the prefix and suffix to help users confirm that they entered the key correctly
+    if [[ $n -gt 8 ]] && [[ $n -lt 65 ]]
+    then
+        prompt="*"
+    else
+
+        prompt="$char"
+    fi
+
+    # Update the saved key and the count increment
+    ngc_api_key+="$char"
+    ((n=n+1))
+
+    # NOTE: AFAICT all NVIDIA personal access tokens are 70 characters long
+    # Exit if our input has exceeded the 70 character standard key length.
+    # This help us avoid a double copy situation.
+    if [[ $n == 70 ]]
+    then
+        break
+    fi
+done
 
 echo 'Writing key to .config/ngc-api-key'
 echo "$ngc_api_key" > .config/ngc-api-key
@@ -44,6 +73,9 @@ time sudo docker compose pull
 mkdir -p data/nim
 mkdir -p data/webui
 mkdir -p data/caddy
+
+# Just to make sure we don't hit any permissions issues
+chmod -R a+w data
 
 echo 'Starting docker services'
 time sudo docker compose up -d
