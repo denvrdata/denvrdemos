@@ -16,18 +16,25 @@
   - [Conclusion](#conclusion)
   - [Links](#links)
 
-In Denvr’s webinar on Aug 22nd, 2024, we showed how a **Retrieval Augmented Generation (RAG)** pipeline can be used to customize a foundation **Large Language Model (LLM)**, without expensive fine tuning jobs. While this approach has several applications, we demonstrated building an AI assistant for onboarding new Denvr employees. In this blog post, we’ll review some of the key concepts about RAG and dig a little deeper into how we deployed the demo on Denvr Cloud.
+In Denvr’s webinar on Aug 22nd, 2024, we showed how a **Retrieval Augmented Generation (RAG)** pipeline can be used to customize a foundation **Large Language Model (LLM)**, without expensive fine tuning jobs. 
+While this approach has several applications, we demonstrated building an AI assistant for onboarding new Denvr employees. 
+In this blog post, we’ll review some of the key concepts about RAG and dig a little deeper into how to deploy your own stack on Denvr Cloud.
 
 ## Background
 
-Over the past few years, tools like ChatGPT and Copilot have made LLMs ubiquitous. These massive models are beginning to show up in everything from our email clients to our code editors. Despite this, LLMs are still just probabilistic models, trained on finite datasets. As a result, they are still subject to the following weaknesses:
+Over the past few years, tools like ChatGPT and Copilot have made LLMs ubiquitous. 
+These massive models are beginning to show up in everything from our email clients to our code editors. 
+Despite this, LLMs are still just probabilistic models, trained on finite datasets. 
+As a result, they are still subject to the following weaknesses:
 
 - **Overly General** - due to the amount of data it was trained on
 - **Static Knowledge** - training data represents a static snapshot of the world
 - **Lacks Citations** - apart from plagiarism, this limits how we can learn and vet LLM responses
 - **Hallucinations** - prone to make up answers that only sound correct
 
-RAG pipelines are one way to mitigate these weakness by including a search component, and some prompt engineering. The diagram below covers one of the more common workflows, incorporating an embedding model and a vector database. Conceptually, you really just need a:
+RAG pipelines are one way to mitigate these weakness by including a search component, and some prompt engineering. 
+The diagram below covers one of the more common workflows, incorporating an embedding model and a vector database. 
+Conceptually, you really just need a:
 
 - **Document Store** - you can search with the input prompt
 - **Query Augmentation Step** - to incorporate that relevant data/context into the original prompt you’re sending to the LLM.
@@ -43,7 +50,8 @@ In our diagram, we are:
 2. Running our original prompt through the same embedding model and using the result to query the database for relevant stored context. 
 3. Augmenting the original prompt with the most relevant chunks of context found and send that new prompt to the LLM. 
 
-A nice feature of this approach is that we can experiment with different search and query augmentation strategies independent of one another. Similarly, you can also experiment with different LLMs, embedding models and reference datasets.
+A nice feature of this approach is that we can experiment with different search and query augmentation strategies independent of one another. 
+Similarly, you can also experiment with different LLMs, embedding models and reference datasets.
 
 ![Software Stack](assets/images/stack.drawio.svg)
 
@@ -51,10 +59,10 @@ A nice feature of this approach is that we can experiment with different search 
 
 ### NVIDIA (Required)
 
-Since we're using an NVIDIA NIM container for our backend / foundation LLM and NVIDIA account.
-We'll assume you don't already have access to NVIDIA enterprise and would like to signup for a free developer account.
+Since we're using an NVIDIA NIM container for our backend / foundation LLM, we'll need an NVIDIA account.
+We'll assume you don't already have access to NVIDIA enterprise and would like to signup for a [free developer account](https://developer.nvidia.com/login).
 
-[Log in | NVIDIA Developer](https://developer.nvidia.com/login)
+![NVIDIA Developer Account](assets/images/nvidia-developer-account.png)
 
 Once you've signed up, make sure to wait for an email from `account@nvidia.com` with the subject "NVIDIA Account Created".
 You'll need to verify your email and accept the terms before any personal access tokens you generate will be usable.
@@ -76,20 +84,20 @@ In order to pull down an NVIDIA NIM container you'll need to login to your [deve
 
 ![NGC Key](assets/images/ngc-key.png)
 
-When you hit "Generate Personal Key", you'll need to give your key a name and expiration.
+When you hit **"Generate Personal Key"**, you'll need to give your key a name and expiration.
 At minimum, you should authorize access to "NGC Catalog".
-You'll also want to save token `nvapi-****` somewhere safe like in a password manager.
+You'll also want to save token `nvapi-****` somewhere safe, like in a password manager.
 
 ### Denvr VM
 
-After loggin into the [Denvr dashboard](console.cloud.denvrdata.com), navigate to 'Virtual Machines' tab using left navigation menu and hit "Create Virtual Machine".
+After logging into Denvr's [console](console.cloud.denvrdata.com), navigate to *'Virtual Machines'* tab using the left navigation menu and hit **"Create Virtual Machine"**.
 
 <p float="left">
     <img src="assets/images/denvr-console.webp" width=60%>
     <img src="assets/images/create-vm.png" width=35%>
 </p>
 
-We'll start by giving our VM a name and selecting the instance type we want from either the `on-demand` or `reserved` pools.
+We'll start by giving our VM a name and selecting the instance type we want from either the on-demand or reserved pools.
 
 ![Configure VM Instance](assets/images/config-vm-instance.png)
 
@@ -98,11 +106,11 @@ Next we'll select the OS and whether we want the NVIDIA drivers and docker conta
 ![Configure VM OS](assets/images/config-vm-os.avif)
 
 We'll also specify any NFS shares (personal or shared) to mount in the VM.
-Finally, we'll provide the SSH public key that we'll use to access the VM.
+Finally, we'll provide our SSH public key for access to the VM.
 
 ![Configure VM Access](assets/images/config-vm-access.png)
 
-Hit Launch Instance and wait for the machine to come "ONLINE".
+Hit **"Launch Instance"** and wait for the machine to come "ONLINE".
 
 ![VM Pending](assets/images/vm-pending.png)
 
@@ -121,56 +129,99 @@ From this machine we'll just clone this demo repo and run the config.sh script
 > cd denvrdemos/yara
 
 > bash config.sh
+Entry your NGC API Key (nvapi-****): nvapi-***************************************************************
+Writing key to .config/ngc-api-key
+Writing key to docker environment variable in .config/nim.env
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100    15  100    15    0     0    354      0 --:--:-- --:--:-- --:--:--   357
+Writing .config/caddy/Caddyfile
+198.145.127.121.nip.io {
+    reverse_proxy webui:8080
+}
+HTML docs already found. Skipping download.
+Logging into nvcr.io
+WARNING! Your password will be stored unencrypted in /root/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credential-stores
+
+Login Succeeded
+Pulling down docker images
+[+] Pulling 49/49
+ ✔ webui Pulled                                                                                                                78.4s
+   ...
+ ✔ caddy Pulled                                                                                                                 1.6s
+   ...
+ ✔ nim Pulled                                                                                                                 168.6s
+   ...
+
+real    2m49.063s
+user    0m0.044s
+sys     0m0.329s
+Starting docker services
+[+] Running 4/4
+ ✔ Network yara_default    Created                                                                                              0.1s
+ ✔ Container yara-nim-1    Healthy                                                                                            101.8s
+ ✔ Container yara-webui-1  Healthy                                                                                            109.8s
+ ✔ Container yara-caddy-1  Started                                                                                            110.0s
+
+real    1m58.309s
+user    0m0.024s
+sys     0m0.024s
+Configuration complete. Open 198.145.127.121.nip.io in your browser.
 ```
 
-TODO: Run config.sh and show output
-
-**NOTE** - We've already provided a copy of Denvr's public docs used in the webinar in `data/webui/docs`, but feel free to remove these and add your own. For reference, the command used to download the .html files is provided below. Open WebUI should be able to parse common file formats like .txt, .html and .pdf files.
+**NOTE** - We've already provided a copy of Denvr's public docs used in the webinar in `data/webui/docs`, but feel free to remove these and add your own. 
+For reference, the command used to download the .html files is provided below. 
 
 ```
 cd data/webui/docs
 wget -q https://docs.denvrdata.com/docs/sitemap.xml --output-document - | grep -E -o "https://docs\.denvrdata\.com[^<]+" | wget -q -E -i - --wait 0
 ```
 
+Open WebUI should be able to parse common file formats like .txt, .html and .pdf files.
+
+
 ## Configuration
 
-During our webinar we used a preconfigured docker container and simply stepped you through our changes.
+During our webinar we stepped you through our preconfigured Open WebUI container.
 In this section, we'll show you how to configure an Open WebUI RAG pipeline for yourself.
 Feel free to play around with System Prompts, RAG Templates or use your own documents as we work through this section.
 
 ### Authentication
 
-Assuming you haven't uncommented the line `WEBUI_AUTH=False` in the `compose.yml` file, you'll be prompted to create the initial admin account. 
+Assuming you haven't uncommented the line `WEBUI_AUTH=False` in the `.config/webui.env` file, you'll be prompted to create the initial admin account. 
 For this example, we'll stick to simple email/password authentication.
 
-TODO: Authentication screenshot
+<p float="left">
+    <img src="assets/images/webui-login.png" width=45%>
+    <img src="assets/images/webui-signup.png" width=45%>
+</p>
 
-From here you can also add your friends and coworkers to your server.
+From here you can use the **"Admin Panel"** to add your friends and coworkers to your server.
 
-TODO: Screenshots of User -> Admin Panel
+<p float="left">
+    <img src="assets/images/webui-admin-panel.png" width=30%>
+    <img src="assets/images/webui-accounts.png" width=65%>
+</p>
 
-From the same Admin Panel from above navigate to the settings tab.
+From the same Admin Panel, navigate to the *'settings'* tab and hit **"Connections"**.
 
-TODO: Screenshot of the settings tab
-
-If you navigate to "Connections"
-
-TODO: Screenshot of connections
+![WebUI Connections](assets/images/webui-connections.png)
 
 We'll see that our OpenAI API endpoint is pointed to `http://nim:8000/v1`. 
 The password doesn't matter, but Open WebUI requires it.
 
 ### Documents
 
-As previously mentioned, we've already provided our public Denvr docs at `/data/docs`.
-Before we can have our AI assistant reference these documents we need to tell Open WebUI 
-to scan these documents and store the embeddings in a vector database.
-Thanksfully, Open WebUI comes with a default embedding model and a vector database.
-From the settings tab shown earlier, navigate to the "Documents" page.
+As previously mentioned, we've already provided our public Denvr docs at `/data/docs` inside the container.
+Before we can have our AI assistant reference these documents, we need to tell Open WebUI to scan these documents and store the embeddings in a vector database.
+Thanksfully, Open WebUI already comes with a default embedding model and a vector database.
+From the *'settings'* tab shown earlier, navigate to the **"Documents"** page.
 
-TODO: Screenshot of the Documents page
+![WebUI Documents](assets/images/webui-documents.png)
 
-On this page, we'll just hit the `Scan` button and replace the RAG Template with the following:
+On this page, we'll just hit the **"Scan"** button and replace the *'RAG Template'* with the following:
 
 ```
 **Generate Response to User Query**
@@ -197,17 +248,17 @@ We just added the following guard.
 If you don't know the answer, simply state that you don't know
 ```
 
-Hit the `Save` button at the bottom an navigate the the `Workspace` seen in the left sidebar.
+Hit the **"Save"** button at the bottom an navigate the the *'Workspace'* seen in the left sidebar.
 
 ### YARA Model
 
-From the `Workspace` you should see the base model configuration:
+From the *'Workspace'* you should see the base model configuration:
 
-TODO: Picture of initial workspace
+![WebUI Workspace](assets/images/webui-workspace.png)
 
-From here, select "Create a model"
+From here, select **"Create a model"**
 
-TODO: Picture of Create model button
+![YARA Model](assets/images/webui-yara-model.png)
 
 Fill out the following fields:
 
@@ -217,50 +268,69 @@ Fill out the following fields:
 - Description: Yet Another RAG Assistant
 
 Model Params - System Prompt
-"""
-You are a friendly AI assistant for onboarding new Denvr Dataworks employees. 
-Use a conversational tone and provide helpful and informative responses, utilizing external knowledge when possible.
-"""
+```
+You are a friendly AI assistant for onboarding new Denvr Dataworks employees. Use a conversational tone and provide helpful and informative responses, utilizing external knowledge when possible.
+```
 
-Under knowledge hit "Select Documents" and select COLLECTION - All Documents
+Under knowledge hit **"Select Documents"** and select *'COLLECTION - All Documents'*
 
-Then hit save.
+Then hit **"Save & Create"** at the bottom.
 
 
 ### Usage
 
 Okay, now lets play around with some prompts on both the base Llama 3 model and our YARA configuration.
 
-We'll start by selecting the Llama model from the "Workspace" window, and give it an easy questions like 
+We'll start by selecting the base Llama model from the "Workspace" window, and give it an easy question.
 
-TODO: Screenshot of workspace model
 ```
 What is an Large Language Model?
 ```
-we'll get some reasonable output
 
-Now we'll ask it about Denvr Dataworks.
+![Llama LLM Chat](assets/images/llama-llm-chat.png)
+
+As expected, the base Llama 3 model gives us reasonable output.
+
+What if we ask it a question about Denvr Dataworks network bandwidth?
 ```
 What network bandwidth does Denvr Dataworks offer?
 ```
+![Llama Denvr Chat](assets/images/llama-denvr-chat.png)
 
-TODO: Screenshot of the chat
+Unfortunately, the base Llama model doesn't really know anything about Denvr Dataworks.
+In this particular case, the LLM just gave us a generic response that isn't grounded in any particular documentation on our site.
 
-As we might have guessed, the base Llama model doesn't know anything about Denvr Dataworks.
+what happens if we start another chat with our YARA model and ask it ths same question?
 
-Now we'll start another chat with our YARA model and ask it ths same question.
+![YARA Denvr Chat](assets/images/yara-denvr-chat.png)
 
-TODO: Screenshot of YARA chat
+As we can see, the response from the YARA model utilizes specific values from our documentation.
+For example, it correctly identifies the different network speeds like inter-cluster communication, InfiniBand, and shared Interenet access by region. 
+The values are also clearly pulled from our provided docs. 
+However, as this is a generative model, there are still some issues.
+For example, it would be more helpful if it differentiate the network speeds offered in each region (e.g, MSC1 vs HOU1)
+
+Just to make sure that wasn't a fluke, what if we ask the YARA model a question about Denvr's instance types?
+```
+What instance types does Denvr Dataworks offer?
+```
+![YARA Denvr Chat 2](assets/images/yara-denvr-chat2.png)
+
+Again, we get accurate responses, though a bit more detail on which region each instance type is offered in might be helpful.
+
+Feel free to play around with different prompts and settings to see how it changes the output.
 
 
 ## Conclusion
 
-In this guide, we reviewed what RAG pipelines are and why they're useful for building intelligent chat tools. We also stepped through deploying a simple RAG application on Denvr Cloud using:
+In this guide, we reviewed what RAG pipelines are and why they're useful for building low cost and personalized chat tools. 
+We also stepped through deploying a simple RAG application on Denvr Cloud using:
 
 - **NVIDIA NIM** - for our inference backend
 - **Open WebUI** - for our chat interface and RAG pipeline
+- **Caddy + nim.io** - for automatic HTTPS encryption and a domain name
 
-We also include instruction for adding your own documents and deploying this stack behind an HTTPS server with Caddy and nip.io.
+We also include instruction for adding your own documents.
 
 
 ## Links
