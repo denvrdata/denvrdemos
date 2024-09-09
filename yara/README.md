@@ -335,8 +335,11 @@ We also include instruction for adding your own documents.
 
 ## Links
 
-NVIDIA:
+Denvr:
+- [Denvr Registration](https://console.cloud.denvrdata.com/account/register-tenant)
+- [Denvr Sales Team](https://www.denvrdata.com/contact-sales)
 
+NVIDIA:
 - [Log in | NVIDIA Developer](https://developer.nvidia.com/login)
 - [Getting Started | NVIDIA Docs](https://docs.nvidia.com/nim/large-language-models/latest/getting-started.html)
 - [org.ngc.nvidia.com/setup/personal-keys](https://org.ngc.nvidia.com/setup/personal-keys)
@@ -345,4 +348,3 @@ NVIDIA:
 Caddy:
 - [Caddy - The Ultimate Server wih Automatic HTTPS](https://caddyserver.com/)
 - [nip.io - wildcard DNS for any IP Address](https://nip.io/)
-
