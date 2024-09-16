@@ -1,18 +1,16 @@
 services:
   mongo:
     image: mongo:7.0.14
-    # Runs on port 27017
     volumes:
       - ./data/mongo:/data/db:rw
     healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/test --quiet
+      test: echo 'db.runCommand("ping").ok' | mongosh mongo:27017/test --quiet
       interval: 10s
       timeout: 10s
       retries: 5
       start_period: 40s
   tgi:
     image: ghcr.io/huggingface/tgi-gaudi:2.0.4
-    # Runs on port 8080
     shm_size: 16GB
     volumes:
       - ./data/tgi:/data:rw
@@ -20,25 +18,28 @@ services:
       - path: ./.config/tgi.env
         required: true
     runtime: habana
-    command: --model-id ${MODEL_ID} --max-input-length 1024 --max-total-tokens 2048
+    command: --model-id ${MODEL_ID} --port 8080 --max-input-length 1024 --max-total-tokens 2048
     healthcheck:
-      test: curl --fail http://localhost:8080
+      test: curl --fail http://tgi:8080/info
       interval: 30s
       timeout: 30s
       retries: 5
       start_period: 60s
   chatui:
     # Hugging face doesn't provide specific releases, so we're using the sha tag
-    image: chatui:sha-87d3884
-    # Runs on port 3000
+    image: huggingface/chat-ui:sha-87d3884
     volumes:
-      - ./.config/chatui/.env.local:/app/.env.local:ro
-    healthcheck:
-      test: curl --fail http://localhost:3000
-      interval: 30s
-      timeout: 30s
-      retries: 5
-      start_period: 60s
+      - type: bind
+        source: ./.config/chatui/.env.local
+        target: /app/.env.local
+    # NOTE: The default chatui image doesn't have curl or wget installed
+    # so this healthcheck won't work.
+    # healthcheck:
+      # test: curl --fail http://chatui:3000/healtcheck
+      # interval: 30s
+      # timeout: 30s
+      # retries: 3
+      # start_period: 30s
     depends_on:
       mongo:
         condition: service_healthy
@@ -57,8 +58,8 @@ services:
       interval: 30s
       timeout: 30s
       retries: 3
-      start_period: 60s
-    depends_on:
-      chatui:
-        condition: service_healthy
+      start_period: 30s
+    # depends_on:
+      # chatui:
+        # condition: service_healthy
 
