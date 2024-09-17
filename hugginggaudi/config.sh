@@ -48,4 +48,4 @@ chmod -R a+w data
 echo 'Starting docker services'
 time sudo docker compose up -d
 
-echo "Configuration complete. Open ${IP}.nip.io in your browser."
+echo "Configuration complete. Open ${IP}.nip.io/chat in your browser."
