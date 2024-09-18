@@ -124,7 +124,7 @@ Now that we have our NGC key and Denvr VM we'll SSH into our machine.
 From this machine we'll just clone this demo repo and run the config.sh script
 
 ```shell
-> git clone -b rf/yara https://github.com/denvrdata/denvrdemos.git
+> git clone https://github.com/denvrdata/denvrdemos.git
 
 > cd denvrdemos/yara
 
