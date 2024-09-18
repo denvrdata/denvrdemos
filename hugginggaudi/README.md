@@ -44,7 +44,7 @@ Now that we have our Denvr VM we'll SSH into our machine.
 From this machine we'll just clone this demo repo and run the config.sh script
 
 ```shell
-> git clone -b rf/hugginggaudi https://github.com/denvrdata/denvrdemos.git
+> git clone https://github.com/denvrdata/denvrdemos.git
 
 > cd denvrdemos/hugginggaudi
 
