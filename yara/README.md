@@ -22,17 +22,16 @@ In this blog post, we’ll review some of the key concepts about RAG and dig a l
 
 ## Background
 
-Over the past few years, tools like ChatGPT and Copilot have made LLMs ubiquitous. 
-These massive models are beginning to show up in everything from our email clients to our code editors. 
-Despite this, LLMs are still just probabilistic models, trained on finite datasets. 
-As a result, they are still subject to the following weaknesses:
+Over the past few years, tools like ChatGPT and Copilot have made LLMs widely accessible, appearing in everything from email clients to code editors. 
+Despite their reach, LLMs still have notable limitations. 
+As probabilistic models trained on finite datasets, they exhibit the following weaknesses: 
 
-- **Overly General** - due to the amount of data it was trained on
-- **Static Knowledge** - training data represents a static snapshot of the world
-- **Lacks Citations** - apart from plagiarism, this limits how we can learn and vet LLM responses
-- **Hallucinations** - prone to make up answers that only sound correct
+- **Overly General Responses** - Vague or non-specific answers due to broad training data.
+- **Outdated Knowledge** - Training data is static, representing past information.
+- **Lack of Verifiable Sources** - Responses lack citations, making it difficult to verify accuracy.
+- **Hallucinations** - Occasionally generate plausible-sounding, but incorrect or fabricated, information.
 
-RAG pipelines are one way to mitigate these weakness by including a search component, and some prompt engineering. 
+One way is through Retrieval Augmented Generation (RAG) pipelines which pairs LLMs with a search component and prompt engineering. 
 The diagram below covers one of the more common workflows, incorporating an embedding model and a vector database. 
 Conceptually, you really just need a:
 
@@ -69,7 +68,7 @@ You'll need to verify your email and accept the terms before any personal access
 
 ### Denvr (Optional)
 
-Technically, you just need access to a linux box with the NVIDIA GPU(s), drivers and container runtime.
+Technically, you just need access to a Linux box with the NVIDIA GPU(s), drivers and container runtime.
 That being said, if you're gonna use a cloud provider anyway, why not Denvr? :)
 
 You can register for an account with Denvr directly from our [console](https://console.cloud.denvrdata.com/account/register-tenant). 
@@ -80,7 +79,7 @@ For a free trial, please contact our [sales team](https://www.denvrdata.com/cont
 
 ### NGC Keys
 
-In order to pull down an NVIDIA NIM container you'll need to login to your [developer account](https://developer.nvidia.com/login) and navigate to [NGC setup page](https://org.ngc.nvidia.com/setup/personal-keys).
+In order to pull down an NVIDIA NIM container you'll need to log in to your [developer account](https://developer.nvidia.com/login) and navigate to [NGC setup page](https://org.ngc.nvidia.com/setup/personal-keys).
 
 ![NGC Key](assets/images/ngc-key.png)
 
@@ -101,7 +100,7 @@ We'll start by giving our VM a name and selecting the instance type we want from
 
 ![Configure VM Instance](assets/images/config-vm-instance.png)
 
-Next we'll select the OS and whether we want the NVIDIA drivers and docker container runtime environment preinstalled (recommended).
+Next we'll select the OS and whether we want the NVIDIA drivers and Docker container runtime environment preinstalled (recommended).
 
 ![Configure VM OS](assets/images/config-vm-os.avif)
 
@@ -129,7 +128,7 @@ From this machine we'll just clone this demo repo and run the config.sh script
 > cd denvrdemos/yara
 
 > bash config.sh
-Entry your NGC API Key (nvapi-****): nvapi-***************************************************************
+Enter your NGC API Key (nvapi-****): nvapi-***************************************************************
 Writing key to .config/ngc-api-key
 Writing key to docker environment variable in .config/nim.env
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
@@ -216,7 +215,7 @@ The password doesn't matter, but Open WebUI requires it.
 
 As previously mentioned, we've already provided our public Denvr docs at `/data/docs` inside the container.
 Before we can have our AI assistant reference these documents, we need to tell Open WebUI to scan these documents and store the embeddings in a vector database.
-Thanksfully, Open WebUI already comes with a default embedding model and a vector database.
+Thankfully, Open WebUI already comes with a default embedding model and a vector database.
 From the *'settings'* tab shown earlier, navigate to the **"Documents"** page.
 
 ![WebUI Documents](assets/images/webui-documents.png)
@@ -248,7 +247,7 @@ We just added the following guard.
 If you don't know the answer, simply state that you don't know
 ```
 
-Hit the **"Save"** button at the bottom an navigate the the *'Workspace'* seen in the left sidebar.
+Hit the **"Save"** button at the bottom and navigate the the *'Workspace'* seen in the left sidebar.
 
 ### YARA Model
 
@@ -300,12 +299,12 @@ What network bandwidth does Denvr Dataworks offer?
 Unfortunately, the base Llama model doesn't really know anything about Denvr Dataworks.
 In this particular case, the LLM just gave us a generic response that isn't grounded in any particular documentation on our site.
 
-what happens if we start another chat with our YARA model and ask it ths same question?
+what happens if we start another chat with our YARA model and ask it this same question?
 
 ![YARA Denvr Chat](assets/images/yara-denvr-chat.png)
 
 As we can see, the response from the YARA model utilizes specific values from our documentation.
-For example, it correctly identifies the different network speeds like inter-cluster communication, InfiniBand, and shared Interenet access by region. 
+For example, it correctly identifies the different network speeds like inter-cluster communication, InfiniBand, and shared Internet access by region. 
 The values are also clearly pulled from our provided docs. 
 However, as this is a generative model, there are still some issues.
 For example, it would be more helpful if it differentiate the network speeds offered in each region (e.g, MSC1 vs HOU1)

@@ -6,7 +6,7 @@ ROOT=$(pwd)
 
 n=0
 ngc_api_key=""
-prompt="Entry your NGC API Key (nvapi-****): "
+prompt="Enter your NGC API Key (nvapi-****): "
 while IFS= read -p "$prompt" -r -s -n 1 char
 do
     # Exit immediately if they hit enter
