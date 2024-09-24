@@ -6,27 +6,27 @@
   - [Links](#links)
 
 In collaboration with Intel, our team here at Denvr has been hard at work deploying dozens of Gaudi 2 nodes for our clients.
-In terms of performance, the Gaudi 2 sits between the NVIDIA A100 and H100 lineups with more VRAM than both. 
-Depending on your use case the Gaudi 2 offers competitive cost to performance. 
+In terms of performance, the Gaudi 2 sits between the NVIDIA A100 and H100 lineups with more VRAM than both.
+Depending on your use case the Gaudi 2 offers competitive cost to performance.
 But how hard is it to get started?
 
 In this blog post, we'll cover provisioning an Intel Gaudi 2 VM on Denvr Cloud, and how to run a simple ChatUI + TGI inference application.
 
 ## Provisioning
 
-After logging into Denvr's [console](console.cloud.denvrdata.com), navigate to *'Virtual Machines'* tab using the left navigation menu and hit **"Create Virtual Machine"**.
+After logging into Denvr's [console](console.cloud.denvrdata.com), navigate to the *'Virtual Machines'* tab using the left navigation menu and hit **"Create Virtual Machine"**.
 
 <p float="left">
     <img src="assets/images/denvr-console.webp" width=60%>
     <img src="assets/images/create-vm.png" width=35%>
 </p>
 
-We'll start by giving our VM a name and selecting the instance type we want from either the on-demand or reserved pools. 
+We'll start by naming our VM and selecting the instance type we want from the on-demand or reserved pools.
 In our case, we'll select 'Intel Gaudi' from 'reserved-denvr'.
 
 ![Configure VM Instance](assets/images/denvr-vm-instance.png)
 
-Next we'll select the OS and whether we want the Habana drivers and docker container runtime environment preinstalled (recommended).
+Next, we'll select the OS and decide whether we want the preinstalled Habana drivers and docker container runtime environment (recommended).
 We'll also specify any NFS shares (personal or shared) to mount in the VM.
 Finally, we'll provide our SSH public key for access to the VM.
 
@@ -36,12 +36,12 @@ Hit **"Launch Instance"** and wait for the machine to come "ONLINE".
 
 ## Docker
 
-Now that we have our Denvr VM we'll SSH into our machine.
+Now we'll SSH into our new Denvr VM.
 
 ```shell
 > ssh ubuntu@<public_ip>
 ```
-From this machine we'll just clone this demo repo and run the config.sh script
+We'll clone this demo repo from this machine and run the config.sh script.
 
 ```shell
 > git clone https://github.com/denvrdata/denvrdemos.git
@@ -85,16 +85,16 @@ Configuration complete. Open 198.145.127.76.nip.io/chat in your browser.
 
 ## Usage
 
-Simply navigate to the URL provided in the script and you'll be prompted for your login credentials.
+Navigate to the URL in the script, and you'll be prompted to provide your login credentials.
 
 ![Caddy Auth](assets/images/caddy-auth.png)
 
-From here we're good to start query the LLM.
+From here, we're good to start querying the LLM.
 
 ![Hugging Chat](assets/images/hugging-chat.png)
 
-And there you have it! 
-You've just deployed your first inference application on Intel Gaudi 2 with Denvr Cloud
+And there you have it!
+You've deployed your first inference application on Intel Gaudi 2 with Denvr Cloud.
 
 ## Links
 

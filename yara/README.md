@@ -42,14 +42,14 @@ Conceptually, you just need a:
 
 In our diagram, we are:
 
-1. Populate a vector database by:
+1. Populating a vector database by:
    1. Parsing the raw documents (e.g., doc, pdf, html)
    2. Sending the raw text through a small embedding model
    3. Inserting the embedded text into the database
-2. We run our original prompt through the same embedding model and use the result to query the database for relevant stored context.
-3. Augment the original prompt with the most relevant chunks of context found and send that new prompt to the LLM.
+2. Running our prompt through the same embedding model to query the database for relevant stored context.
+3. Augmenting the prompt with the most relevant context chunks and sending that new prompt to the LLM.
 
-A nice feature of this approach is that we can experiment with different independent search and query augmentation strategies.
+A nice feature of this approach is that we can experiment with different independent search and prompt augmentation strategies.
 Similarly, you can also experiment with different LLMs, embedding models and reference datasets.
 
 ![Software Stack](assets/images/stack.drawio.svg)
@@ -323,14 +323,14 @@ Feel free to play around with different prompts and settings to see how it chang
 
 ## Conclusion
 
-In this guide, we reviewed what RAG pipelines are and how they can help build low-cost and personalized chat tools.
+In this guide, we reviewed what RAG pipelines are and how they can help you build low-cost and personalized chat tools.
 We also stepped through deploying a simple RAG application on Denvr Cloud using the following:
 
 - **NVIDIA NIM** - for our inference backend
 - **Open WebUI** - for our chat interface and RAG pipeline
 - **Caddy + nim.io** - for automatic HTTPS encryption and a domain name
 
-We also include instructions for adding your own documents.
+We also included instructions for adding your own documents.
 
 
 ## Links
