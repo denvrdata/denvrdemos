@@ -31,7 +31,7 @@ As probabilistic models trained on finite datasets, they exhibit the following w
 - **Lack of Verifiable Sources** - Responses lack citations, making it difficult to verify accuracy.
 - **Hallucinations** - Occasionally generate plausible-sounding but incorrect or fabricated information.
 
-One way is through Retrieval Augmented Generation (RAG) pipelines which pairs LLMs with a search component and prompt engineering.
+One mitigation strategy is Retrieval Augmented Generation (RAG) pipelines which pairs LLMs with a search component and prompt engineering.
 The diagram below covers one of the more common workflows, incorporating an embedding model and a vector database.
 Conceptually, you just need a:
 
@@ -116,7 +116,7 @@ Hit **"Launch Instance"** and wait for the machine to come "ONLINE".
 
 ### Docker
 
-Now that we have our NGC key and Denvr VM, we'll SSH it into our machine.
+Now that we have our NGC key and Denvr VM, we'll SSH into our machine.
 
 ```shell
 > ssh ubuntu@<public_ip>
