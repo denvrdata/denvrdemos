@@ -31,10 +31,10 @@ Anyone who has deployed machine learning or optimization platforms to production
 ![XKCD-1838](https://imgs.xkcd.com/comics/machine_learning.png)
 
 We've previously discussed, how overly broad foundation models are limited by stale public datasets.
-Similarly, using external RAG services introduces security restriction around what private data can be used.
+Similarly, using external RAG services introduces security concerns around what private data can be used.
 For these reasons, the ability to integrate these pipelines into existing software and data ecosystems is vital to more widespread and focused adoption.
 
-In this post, we're going to show how modular Python frameworks can be used to tailor these models too your existing software stack. 
+In this post, we're going to show how modular Python frameworks can be used to tailor these models to your existing software stack. 
 In our case, we're using LangChain as a relatively modular out-of-the-box solution.
 LangChain includes various document scrapers, data loaders, LLMs, embedding models and databases vector stores.
 Despite what some older blog posts have indicated, we found the amount of documentation and online resources more than adequate in 2024.
@@ -48,7 +48,7 @@ That being said, other libraries exist and may fit your needs better if you find
 ### Components
 
 - [LangChain](https://python.langchain.com/docs/introduction/) - Our primary python framework
-- [DuckDB](https://duckdb.org/docs/index) - Our sample relational database, could also be sqlite or postgres
+- [DuckDB](https://duckdb.org/docs/index) - Our sample relational database, but this could also be sqlite or postgres
 - [HuggingFace](https://huggingface.co/) - For downloading our LLM and embedding model checkpoints
 
 ### Dependencies
@@ -259,7 +259,7 @@ Maybe you also have tables for chat history, inventory, etc?
 
 Okay, cool, so we have a bunch of downloaded files with some mappings in our `'downloads'` table.
 Now we want to break these files into chunks and store them as embedding vectors we can then search.
-Well we can just use LangChain to couple an embedding model with an `'embeddings'` table to solve this for us.
+We can just use LangChain to couple an embedding model with an `'embeddings'` table to solve this for us.
 
 ```python
 LOGGER.info("Creating a vector store in the duckdb 'embeddings' table.")
@@ -340,7 +340,7 @@ Additional InformationFAQsWhat is the network bandwidth?Internet bandwidth depen
 ### LLM
 
 Now that we have a model coupled to an `'embeddings'` table now we need to connect that to an LLM.
-For simplicity we'll just use [Qwen/Qwen2.5-0.5B](https://huggingface.co/Qwen/Qwen2.5-0.5B).
+For simplicity we'll just use [Qwen/Qwen2.5-0.5B-Instruct](https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct).
 
 ```python
 LLM = HuggingFacePipeline(
@@ -354,7 +354,7 @@ LLM = HuggingFacePipeline(
 LLM.invoke("What is a Large Language Model?")
 ```
 
-NOTE: We just going to use a small Qwen2.5 model for 2 reasons
+NOTE: We using a small Qwen2.5 model for 2 reasons
 
 1. We're focused on learning rather than performance
 2. You can still set device='cpu'` if you don't have a GPU. It'll just be slow :)
