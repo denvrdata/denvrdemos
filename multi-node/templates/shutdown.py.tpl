@@ -1,5 +1,9 @@
 import json
+import logging
+
 from denvr.client import client
+
+logging.basicConfig(level=logging.DEBUG)
 virtual = client('servers/virtual')
 
 print("Shutting down server...")

@@ -1,6 +1,6 @@
 [defaults]
 server = "https://api.cloud.denvrdata.com"
-retries = 5
+retries = 10
 
 [credentials]
 username = "${username}"
