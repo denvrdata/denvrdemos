@@ -11,6 +11,13 @@
 *.pth
 *.engine
 
+.terraform/
+.secrets/
+*.terraform.lock.hcl
+*.secrets.tfvars
+*terraform.tfstate*
+
 # YARA specific
 yara/.config/ngc-api-key
 yara/.config/nim.env
+
