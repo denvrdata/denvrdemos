@@ -164,7 +164,7 @@ threadpoolctl==3.5.0
 tokenizers==0.20.3
 toml==0.10.2
 torch==2.5.1
-tornado==6.4.1
+tornado==6.5.1
 tqdm==4.66.6
 transformers==4.45.2
 triton==3.1.0
