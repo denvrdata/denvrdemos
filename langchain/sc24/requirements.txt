@@ -126,7 +126,7 @@ PyHamcrest==2.0.2
 PyJWT==2.3.0
 pyOpenSSL==21.0.0
 pyparsing==2.4.7
-pypdf==5.1.0
+pypdf==6.4.0
 pyrsistent==0.18.1
 pyserial==3.5
 python-apt==2.4.0+ubuntu3
