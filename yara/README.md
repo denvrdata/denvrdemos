@@ -337,7 +337,7 @@ We also included instructions for adding your own documents.
 
 Denvr:
 - [Denvr Registration](https://console.cloud.denvrdata.com/account/register-tenant)
-- [Denvr Sales Team](https://www.denvrdata.com/contact-sales)
+- [Denvr Sales Team](https://www.denvr.com/contact-our-team)
 
 NVIDIA:
 - [Log in | NVIDIA Developer](https://developer.nvidia.com/login)
